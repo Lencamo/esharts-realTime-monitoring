@@ -5,6 +5,9 @@ import store from './store'
 
 import axios from 'axios'
 
+// 引入全局样式文件
+import '@/assets/css/global.less'
+
 // 全局配置axios的请求🌈根路径
 axios.defaults.baseURL = 'http://127.0.0.1:3000'
 Vue.prototype.$http = axios
