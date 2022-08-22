@@ -8,10 +8,16 @@ export default {
   mounted() {
     this.initChart()
     this.getBarData()
+
+    window.addEventListener('resize', this.screenAdapter)
+    // 屏幕适配
+    this.screenAdapter()
   },
   destroyed() {
     // 取消定时器 —— ① 组件销毁时
     clearInterval(this.timerId)
+
+    window.removeEventListener('resize', this.screenAdapter)
   },
   data() {
     return {
@@ -175,6 +181,39 @@ export default {
 
         this.updateBarGenerate()
       }, 3000)
+    },
+
+    // 监听window窗口大小变化
+    screenAdapter() {
+      const standFontSize = (this.$refs.seller_ref.offsetWidth / 100) * 3.6
+
+      const adapterOption = {
+        title: {
+          textStyle: {
+            fontSize: standFontSize
+          }
+        },
+        tooltip: {
+          axisPointer: {
+            lineStyle: {
+              width: standFontSize
+            }
+          }
+        },
+        series: [
+          {
+            barWidth: standFontSize,
+            itemStyle: {
+              barBorderRadius: [0, standFontSize / 2, standFontSize / 2, 0]
+            }
+          }
+        ]
+      }
+      // 生成图表
+      this.chartInstance.setOption(adapterOption)
+
+      // 手动的调用图表对象的resize 才能产生效果
+      this.chartInstance.resize()
     }
   }
 }
