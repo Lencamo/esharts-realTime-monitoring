@@ -27,6 +27,80 @@ export default {
     initChart() {
       this.chartInstance = this.$echarts.init(this.$refs.seller_ref, 'chalk')
 
+      const initOption = {
+        // 标题配置
+        title: {
+          text: '▎商家销售统计',
+          left: 20,
+          top: 20,
+          textStyle: {
+            fontSize: 38
+          }
+        },
+        // 坐标系配置
+        grid: {
+          top: '20%',
+          left: '3%',
+          right: '6%',
+          bottom: '3%',
+          containLabel: true // 包含坐标轴上的文字 🤔
+        },
+        // 提示框配置
+        tooltip: {
+          trigger: 'axis',
+          // 触发阴影✨
+          axisPointer: {
+            type: 'line',
+            z: 0,
+            lineStyle: {
+              width: 66,
+              color: '#2D3443'
+            }
+          }
+        },
+
+        xAxis: {
+          type: 'value'
+        },
+        yAxis: {
+          type: 'category'
+        },
+        series: [
+          {
+            type: 'bar',
+
+            // 对每个bar进行配置
+            // 宽度
+            barWidth: 66,
+            // 文字
+            label: {
+              show: true,
+              position: 'right',
+              color: 'white'
+            },
+            // 圆角和颜色渐变
+            itemStyle: {
+              barBorderRadius: [0, 33, 33, 0], // 官方文档找不到 😢
+              // 颜色渐变
+              color: new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                // 百分之0状态之下的颜色值
+                {
+                  offset: 0,
+                  color: '#5052EE'
+                },
+                // 百分之100状态之下的颜色值
+                {
+                  offset: 1,
+                  color: '#AB6EE5'
+                }
+              ])
+            }
+          }
+        ]
+      }
+      // 生成图表
+      this.chartInstance.setOption(initOption)
+
       // 定时器 —— ② 鼠标监听事件
       this.chartInstance.on('mouseover', () => {
         clearInterval(this.timerId)
@@ -71,81 +145,18 @@ export default {
       const sellerValues = dynamicData.map((item) => item.value)
 
       // option配置
-      const option = {
-        // 标题配置
-        title: {
-          text: '▎商家销售统计',
-          left: 20,
-          top: 20,
-          textStyle: {
-            fontSize: 38
-          }
-        },
-        // 坐标系配置
-        grid: {
-          top: '20%',
-          left: '3%',
-          right: '6%',
-          bottom: '3%',
-          containLabel: true // 包含坐标轴上的文字 🤔
-        },
-        // 提示框配置
-        tooltip: {
-          trigger: 'axis',
-          // 触发阴影✨
-          axisPointer: {
-            type: 'line',
-            z: 0,
-            lineStyle: {
-              width: 66,
-              color: '#2D3443'
-            }
-          }
-        },
-
-        xAxis: {
-          type: 'value'
-        },
+      const dataOption = {
         yAxis: {
-          type: 'category',
           data: sellerNames
         },
         series: [
           {
-            type: 'bar',
-            data: sellerValues,
-
-            // 对每个bar进行配置
-            // 宽度
-            barWidth: 66,
-            // 文字
-            label: {
-              show: true,
-              position: 'right',
-              color: 'white'
-            },
-            // 圆角和颜色渐变
-            itemStyle: {
-              barBorderRadius: [0, 33, 33, 0], // 官方文档找不到 😢
-              // 颜色渐变
-              color: new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                // 百分之0状态之下的颜色值
-                {
-                  offset: 0,
-                  color: '#5052EE'
-                },
-                // 百分之100状态之下的颜色值
-                {
-                  offset: 1,
-                  color: '#AB6EE5'
-                }
-              ])
-            }
+            data: sellerValues
           }
         ]
       }
       // 生成图表
-      this.chartInstance.setOption(option)
+      this.chartInstance.setOption(dataOption)
     },
 
     // 利用定时器实现数据的动态刷新
