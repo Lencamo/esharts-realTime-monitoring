@@ -7,6 +7,10 @@ const routes = [
   {
     path: '/seller',
     component: () => import('@/views/sellerShow.vue')
+  },
+  {
+    path: '/trend',
+    component: () => import('@/views/trendShow.vue')
   }
 ]
 
