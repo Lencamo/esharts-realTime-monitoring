@@ -1,14 +1,15 @@
 <template>
   <div>
-    <div class="trendTitle">
+    <div class="trendTitle" ref="trendTitle_ref" :style="fontSize">
       <!-- <span>▎销量趋势</span> -->
       <span>▎{{ showTitle }}</span>
       <span
         class="iconfont menu-icon"
+        :style="fontSize"
         @click="$emit('change-status', !showStatus)"
         >&#xe665;</span
       >
-      <div class="select" v-show="showStatus">
+      <div class="select" v-show="showStatus" :style="marginLeft">
         <div
           class="select-item"
           v-for="item in selectTypes"
@@ -17,9 +18,6 @@
         >
           {{ item.text }}
         </div>
-        <!-- <div class="select-item">地区销量趋势</div> -->
-        <!-- <div class="select-item">商家销量趋势</div> -->
-        <!-- <div class="select-item">商品销量趋势</div> -->
       </div>
     </div>
   </div>
@@ -31,7 +29,7 @@ export default {
     prop: 'showStatus',
     event: 'change-status'
   },
-  props: ['showStatus'],
+  props: ['showStatus', 'standFontSize'],
   mounted() {
     this.getLineData()
   },
@@ -61,6 +59,18 @@ export default {
         return []
       } else {
         return this.lineData[this.choiceType].title
+      }
+    },
+
+    // 分辨率适配
+    fontSize() {
+      return {
+        fontSize: this.standFontSize + 'px'
+      }
+    },
+    marginLeft() {
+      return {
+        marginLeft: this.standFontSize / 2 + 'px'
       }
     }
   },
@@ -99,8 +109,9 @@ export default {
     vertical-align: middle;
   }
 
-  .select {
-    margin-left: 20px;
-  }
+  // 不采用固定的px大小
+  // .select {
+  //   margin-left: 20px;
+  // }
 }
 </style>

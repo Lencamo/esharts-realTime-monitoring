@@ -1,7 +1,11 @@
 <template>
   <div class="trendPart-container">
     <!-- 对isShow实行数据🎈双向绑定（只能使用一次😢） -->
-    <trendTitle @showType="latestTypeFn" v-model="isShow"></trendTitle>
+    <trendTitle
+      @showType="latestTypeFn"
+      v-model="isShow"
+      :standFontSize.sync="standFontSize"
+    ></trendTitle>
     <div class="chart-container" ref="trend_ref"></div>
   </div>
 </template>
@@ -28,7 +32,8 @@ export default {
       chartInstance: null, // 空对象
       lineData: null, // object
       showType: 'map', // 显示的哪种销售趋势图表（有map、seller、commodity三种销量趋势）
-      isShow: false // 下拉菜单显示和隐藏🚩标志
+      isShow: false, // 下拉菜单显示和隐藏🚩标志
+      standFontSize: 0
     }
   },
   methods: {
@@ -39,7 +44,7 @@ export default {
       const initOption = {
         // 坐标系配置
         grid: {
-          top: '25%',
+          top: '30%',
           left: '3%',
           right: '6%',
           bottom: '3%',
@@ -154,7 +159,17 @@ export default {
 
     // 监听window窗口大小变化
     screenAdapter() {
-      const adapterOption = {}
+      this.standFontSize = (this.$refs.trend_ref.offsetWidth / 100) * 3.6
+
+      const adapterOption = {
+        // 1、标题和字体图标（在子组件中配置）
+        // 2、图例
+        legend: {
+          itemWidth: this.standFontSize,
+          itemHeight: this.standFontSize,
+          itemGap: this.standFontSize
+        }
+      }
       // 生成图表
       this.chartInstance.setOption(adapterOption)
 
