@@ -1,10 +1,17 @@
 <template>
   <div class="trendPart-container">
+    <!-- 对isShow实行数据🎈双向绑定（只能使用一次😢） -->
+    <trendTitle @showType="latestTypeFn" v-model="isShow"></trendTitle>
     <div class="chart-container" ref="trend_ref"></div>
   </div>
 </template>
 <script>
+import trendTitle from '@/components/trendTitle.vue'
+
 export default {
+  components: {
+    trendTitle
+  },
   mounted() {
     this.initChart()
     this.getLineData()
@@ -19,7 +26,9 @@ export default {
   data() {
     return {
       chartInstance: null, // 空对象
-      lineData: null // object
+      lineData: null, // object
+      showType: 'map', // 显示的哪种销售趋势图表（有map、seller、commodity三种销量趋势）
+      isShow: false // 下拉菜单显示和隐藏🚩标志
     }
   },
   methods: {
@@ -28,15 +37,6 @@ export default {
       this.chartInstance = this.$echarts.init(this.$refs.trend_ref, 'chalk')
 
       const initOption = {
-        // 标题配置
-        title: {
-          text: '▎销量趋势',
-          left: 20,
-          top: 20,
-          textStyle: {
-            fontSize: 38
-          }
-        },
         // 坐标系配置
         grid: {
           top: '25%',
@@ -107,13 +107,13 @@ export default {
       // 1、x轴数据
       const xMonthArr = this.lineData.common.month
       // 2、y轴数据（以地区销量趋势为例）
-      const mapDataArr = this.lineData.map.data
+      const mapDataArr = this.lineData[this.showType].data
       const yLineSeriesArr = mapDataArr.map((item, index) => {
         return {
           // 返回折线图的series相关配置
           type: 'line',
           data: item.data,
-          stack: 'mapLine', // 使用堆叠图显示
+          stack: this.showType, // 使用堆叠图显示
           name: item.name,
           areaStyle: {
             // 颜色渐变(根据透明度)
@@ -134,7 +134,7 @@ export default {
       })
       // 3、图例数据
       const legendArr = mapDataArr.map((item) => item.name)
-      console.log(legendArr)
+      // console.log(legendArr)
 
       // option配置
       const dataOption = {
@@ -160,6 +160,16 @@ export default {
 
       // 手动的调用图表对象的resize 才能产生效果
       this.chartInstance.resize()
+    },
+
+    latestTypeFn(val) {
+      // console.log(val)
+      this.showType = val
+
+      // 更新图表数据
+      this.updateLineGenerate()
+      // 隐藏下拉列表
+      this.isShow = !this.isShow
     }
   }
 }

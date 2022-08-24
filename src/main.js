@@ -7,6 +7,8 @@ import axios from 'axios'
 
 // 引入全局样式文件
 import '@/assets/css/global.less'
+// 引入阿里字体图标
+import '@/assets/font/iconfont.css'
 
 // 全局配置axios的请求🌈根路径
 axios.defaults.baseURL = 'http://127.0.0.1:3000'
