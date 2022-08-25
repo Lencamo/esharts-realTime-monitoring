@@ -61,6 +61,7 @@ export default {
           type: 'category'
         },
         yAxis: {
+          name: '销售金额（万）',
           type: 'value'
         },
         series: [
@@ -135,7 +136,7 @@ export default {
 
             // 圆角和颜色渐变
             itemStyle: {
-              barBorderRadius: [33, 33, 0, 0], // 官方文档找不到 😢
+              // barBorderRadius: [33, 33, 0, 0], // 官方文档找不到 😢
               // 颜色渐变
               color: (arg) => {
                 let selectColorArr = null
@@ -169,9 +170,23 @@ export default {
 
     // 监听window窗口大小变化
     screenAdapter() {
-      // const standFontSize = (this.$refs.rank_ref.offsetWidth / 100) * 3.6
+      const standFontSize = (this.$refs.rank_ref.offsetWidth / 100) * 3.6
 
-      const adapterOption = {}
+      const adapterOption = {
+        title: {
+          textStyle: {
+            fontSize: standFontSize
+          }
+        },
+        series: [
+          {
+            barWidth: standFontSize,
+            itemStyle: {
+              barBorderRadius: [standFontSize / 2, standFontSize / 2, 0, 0]
+            }
+          }
+        ]
+      }
       // 生成图表
       this.chartInstance.setOption(adapterOption)
 
