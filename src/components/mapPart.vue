@@ -4,6 +4,8 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
   mounted() {
     this.initChart()
@@ -24,8 +26,14 @@ export default {
   },
   methods: {
     // 初始化ECharts对象
-    initChart() {
+    async initChart() {
       this.chartInstance = this.$echarts.init(this.$refs.map_ref, 'chalk')
+
+      // 获取本地地图数据
+      const ret = await axios.get('http://127.0.0.1:8080/static/map/china.json')
+      // console.log(ret)
+      // 注册地图
+      this.$echarts.registerMap('chinaMap', ret.data)
 
       const initOption = {
         // 标题配置
@@ -44,16 +52,22 @@ export default {
           right: '6%',
           bottom: '3%',
           containLabel: true // 包含坐标轴上的文字 🤔
+        },
+
+        // 地理坐标系配置
+        geo: {
+          type: 'map',
+          map: 'chinaMap'
         }
       }
       // 生成图表
       this.chartInstance.setOption(initOption)
     },
 
-    // 获取图表数据
+    // 获取散点图数据
     async getMapData() {
-      const { data: res } = await this.$http.get('/api/seller')
-      // console.log(res)
+      const { data: res } = await this.$http.get('/api/map')
+      console.log(res)
 
       this.mapData = res
       this.updateBarGenerate()
@@ -64,9 +78,18 @@ export default {
     // 更新图表（option配置）
     updateBarGenerate() {
       // 数据处理✨
+      const seriseArr = this.mapData.map((item) => {
+        return {
+          type: 'effectScatter',
+          data: item.children,
+          coordinateSystem: 'geo' // 与地图图表关联
+        }
+      })
 
       // option配置
-      const dataOption = {}
+      const dataOption = {
+        series: seriseArr
+      }
       // 生成图表
       this.chartInstance.setOption(dataOption)
     },
