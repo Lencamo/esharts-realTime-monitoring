@@ -73,7 +73,7 @@ export default {
       this.chartInstance.setOption(initOption)
 
       // 监听map地图点击省份的行为
-      // console.log(this.chartInstance._model.option.geo[0].map) // 待修复bug
+      // console.log(this.chartInstance._model.option.geo[0].map) // 待修复bug👀
       this.chartInstance.on('click', async (arg) => {
         // console.log(arg)
         // 获取省份对应的 拼音名、数据文件位置
