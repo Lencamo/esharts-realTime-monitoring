@@ -11,6 +11,10 @@ const routes = [
   {
     path: '/trend',
     component: () => import('@/views/trendShow.vue')
+  },
+  {
+    path: '/map',
+    component: () => import('@/views/mapShow.vue')
   }
 ]
 
