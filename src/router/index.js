@@ -15,6 +15,10 @@ const routes = [
   {
     path: '/map',
     component: () => import('@/views/mapShow.vue')
+  },
+  {
+    path: '/rank',
+    component: () => import('@/views/rankShow.vue')
   }
 ]
 

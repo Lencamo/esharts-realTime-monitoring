@@ -1,5 +1,5 @@
 <template>
-  <div class="sellerShow-container">
+  <div class="trendShow-container">
     <!-- 销量趋势图表 -->
     <trend></trend>
   </div>

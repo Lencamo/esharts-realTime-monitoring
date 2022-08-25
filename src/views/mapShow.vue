@@ -1,5 +1,5 @@
 <template>
-  <div class="sellerShow-container">
+  <div class="mapShow-container">
     <!-- 商家分布模块 -->
     <mapPart></mapPart>
   </div>
