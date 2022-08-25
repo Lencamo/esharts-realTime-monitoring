@@ -45,19 +45,28 @@ export default {
             fontSize: 38
           }
         },
-        // 坐标系配置
-        grid: {
-          top: '20%',
-          left: '3%',
-          right: '6%',
-          bottom: '3%',
-          containLabel: true // 包含坐标轴上的文字 🤔
+
+        // 图例配置
+        legend: {
+          bottom: '5%',
+          left: '5%',
+          icon: 'circle',
+          textStyle: {
+            fontSize: 20
+          },
+          orient: 'vertical' // 竖直展示
         },
 
         // 地理坐标系配置
         geo: {
           type: 'map',
-          map: 'chinaMap'
+          map: 'chinaMap',
+          top: '5%',
+          bottom: '5%',
+          itemStyle: {
+            areaColor: '#2E72BF',
+            borderColor: '#333'
+          }
         }
       }
       // 生成图表
@@ -67,7 +76,7 @@ export default {
     // 获取散点图数据
     async getMapData() {
       const { data: res } = await this.$http.get('/api/map')
-      console.log(res)
+      // console.log(res)
 
       this.mapData = res
       this.updateBarGenerate()
@@ -78,17 +87,31 @@ export default {
     // 更新图表（option配置）
     updateBarGenerate() {
       // 数据处理✨
+      // 1、散点图涟漪点数据
       const seriseArr = this.mapData.map((item) => {
         return {
           type: 'effectScatter',
           data: item.children,
-          coordinateSystem: 'geo' // 与地图图表关联
+          coordinateSystem: 'geo', // 与地图图表关联
+          name: item.name, // 图例的各项名称
+          rippleEffect: {
+            scale: 5, // 设置涟漪动画的缩放比例
+            brushType: 'stroke' // 空心涟漪效果
+          }
         }
+      })
+
+      // 2、图例数据
+      const legendArr = this.mapData.map((item) => {
+        return item.name
       })
 
       // option配置
       const dataOption = {
-        series: seriseArr
+        series: seriseArr,
+        legend: {
+          data: legendArr
+        }
       }
       // 生成图表
       this.chartInstance.setOption(dataOption)
