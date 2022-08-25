@@ -47,10 +47,10 @@ export default {
         },
 
         xAxis: {
-          type: 'value'
+          type: 'category'
         },
         yAxis: {
-          type: 'category'
+          type: 'value'
         },
         series: [
           {
@@ -68,23 +68,34 @@ export default {
       // console.log(res)
 
       this.barData = res
-      this.updateBarGenerate()
 
       // 数据处理✨
+      // 排序
+      this.barData.sort((a, b) => {
+        return b.value - a.value
+      })
+
+      this.updateBarGenerate()
     },
 
     // 更新图表（option配置）
     updateBarGenerate() {
       // 数据处理✨
+      const xProvinceArr = this.barData.map((item) => {
+        return item.name
+      })
+      const yValueArr = this.barData.map((item) => {
+        return item.value
+      })
 
       // option配置
       const dataOption = {
-        yAxis: {
-          // data: sellerNames
+        xAxis: {
+          data: xProvinceArr
         },
         series: [
           {
-            // data: sellerValues
+            data: yValueArr
           }
         ]
       }
