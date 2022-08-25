@@ -14,12 +14,18 @@ export default {
     this.screenAdapter()
   },
   destroyed() {
+    // 取消定时器 —— ① 组件销毁时
+    clearInterval(this.timerId)
+
     window.removeEventListener('resize', this.screenAdapter)
   },
   data() {
     return {
       chartInstance: null, // 空对象
-      barData: []
+      barData: [],
+      startValue: 0, // 区域缩放的起点
+      endValue: 9, // 区域缩放的终点
+      timerId: null
     }
   },
   methods: {
@@ -65,6 +71,14 @@ export default {
       }
       // 生成图表
       this.chartInstance.setOption(initOption)
+
+      // 定时器 —— ② 鼠标监听事件
+      this.chartInstance.on('mouseover', () => {
+        clearInterval(this.timerId)
+      })
+      this.chartInstance.on('mouseout', () => {
+        this.showChangeFn()
+      })
     },
 
     // 获取图表数据
@@ -81,6 +95,9 @@ export default {
       })
 
       this.updateBarGenerate()
+
+      // 启动定时器
+      this.showChangeFn()
     },
 
     // 更新图表（option配置）
@@ -104,6 +121,14 @@ export default {
         xAxis: {
           data: xProvinceArr
         },
+
+        // 区域缩放配置
+        dataZoom: {
+          show: false,
+          startValue: this.startValue,
+          endValue: this.endValue
+        },
+
         series: [
           {
             data: yValueArr,
@@ -152,6 +177,25 @@ export default {
 
       // 手动的调用图表对象的resize 才能产生效果
       this.chartInstance.resize()
+    },
+
+    // 利用定时器实现数据的动态刷新
+    showChangeFn() {
+      if (this.timerId) {
+        clearInterval(this.timerId)
+      }
+      this.timerId = setInterval(() => {
+        this.startValue++
+        this.endValue++
+
+        // console.log(this.totalPage)
+        if (this.endValue > this.barData.length - 1) {
+          this.startValue = 0
+          this.endValue = 9
+        }
+
+        this.updateBarGenerate()
+      }, 3000)
     }
   }
 }
