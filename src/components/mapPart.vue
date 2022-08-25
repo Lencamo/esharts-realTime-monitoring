@@ -40,10 +40,7 @@ export default {
         title: {
           text: '▎商家分布模块',
           left: 20,
-          top: 20,
-          textStyle: {
-            fontSize: 38
-          }
+          top: 20
         },
 
         // 图例配置
@@ -119,9 +116,25 @@ export default {
 
     // 监听window窗口大小变化
     screenAdapter() {
-      // const standFontSize = (this.$refs.map_ref.offsetWidth / 100) * 3.6
+      const standFontSize = (this.$refs.map_ref.offsetWidth / 100) * 3.6
 
-      const adapterOption = {}
+      const adapterOption = {
+        // 1、标题
+        title: {
+          textStyle: {
+            fontSize: standFontSize
+          }
+        },
+        // 2、图例
+        legend: {
+          itemWidth: standFontSize / 2,
+          itemHeight: standFontSize / 2,
+          itemGap: standFontSize / 2,
+          textStyle: {
+            fontSize: standFontSize / 2
+          }
+        }
+      }
       // 生成图表
       this.chartInstance.setOption(adapterOption)
 
