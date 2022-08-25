@@ -46,6 +46,11 @@ export default {
           containLabel: true // 包含坐标轴上的文字 🤔
         },
 
+        // 提示框配置
+        tooltip: {
+          trigger: 'item'
+        },
+
         xAxis: {
           type: 'category'
         },
@@ -80,6 +85,12 @@ export default {
 
     // 更新图表（option配置）
     updateBarGenerate() {
+      const colorArr = [
+        ['#0BA82C', '#4FF778'],
+        ['#2E72BF', '#23E5E5'],
+        ['#5052EE', '#AB6EE5']
+      ]
+
       // 数据处理✨
       const xProvinceArr = this.barData.map((item) => {
         return item.name
@@ -95,7 +106,35 @@ export default {
         },
         series: [
           {
-            data: yValueArr
+            data: yValueArr,
+
+            // 圆角和颜色渐变
+            itemStyle: {
+              barBorderRadius: [33, 33, 0, 0], // 官方文档找不到 😢
+              // 颜色渐变
+              color: (arg) => {
+                let selectColorArr = null
+                if (arg.value > 300) {
+                  selectColorArr = colorArr[0]
+                } else if (arg.value > 200) {
+                  selectColorArr = colorArr[1]
+                } else {
+                  selectColorArr = colorArr[2]
+                }
+                return new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  // 百分之0状态之下的颜色值
+                  {
+                    offset: 0,
+                    color: selectColorArr[0]
+                  },
+                  // 百分之100状态之下的颜色值
+                  {
+                    offset: 1,
+                    color: selectColorArr[1]
+                  }
+                ])
+              }
+            }
           }
         ]
       }
