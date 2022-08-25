@@ -1,10 +1,11 @@
 <template>
-  <div class="mapPart-container">
+  <div class="mapPart-container" @dblclick="mapRevert">
     <div class="chart-container" ref="map_ref"></div>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import { getProvinceMapInfo } from '@/utils/name2pinyin'
 
 export default {
   mounted() {
@@ -38,7 +39,7 @@ export default {
       const initOption = {
         // 标题配置
         title: {
-          text: '▎商家分布模块',
+          text: '▎商家分布',
           left: 20,
           top: 20
         },
@@ -68,6 +69,28 @@ export default {
       }
       // 生成图表
       this.chartInstance.setOption(initOption)
+
+      // 监听map地图点击省份的行为
+      this.chartInstance.on('click', async (arg) => {
+        // console.log(arg)
+        // 获取省份对应的 拼音名、数据文件位置
+        const provinceInfo = getProvinceMapInfo(arg.name)
+        // console.log(provinceInfo)
+        // 获取本地省份地图数据
+        const ret = await axios.get('http://127.0.0.1:8080' + provinceInfo.path)
+        // console.log(ret)
+        // 切换🚩China图表为省份的图表
+        // 1、注册地图
+        this.$echarts.registerMap(provinceInfo.key, ret.data)
+        const provinceOption = {
+          // 地理坐标系配置
+          geo: {
+            map: provinceInfo.key
+          }
+        }
+        // 生成图表
+        this.chartInstance.setOption(provinceOption)
+      })
     },
 
     // 获取散点图数据
@@ -140,6 +163,17 @@ export default {
 
       // 手动的调用图表对象的resize 才能产生效果
       this.chartInstance.resize()
+    },
+
+    // 省份图表 返回到 中国图表
+    mapRevert() {
+      const revertOption = {
+        geo: {
+          map: 'chinaMap'
+        }
+      }
+      // 生成图表
+      this.chartInstance.setOption(revertOption)
     }
   }
 }
