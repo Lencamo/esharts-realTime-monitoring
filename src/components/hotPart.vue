@@ -2,9 +2,13 @@
   <div class="hotPart-container">
     <div class="chart-container" ref="hot_ref"></div>
     <!-- 后面两个字体图标必须放到后面🤔 -->
-    <span class="iconfont left-arrow" @click="toLeft">&#xe61e;</span>
-    <span class="iconfont right-arrow" @click="toRight">&#xe61f;</span>
-    <span class="pieData-name">{{ pieName }}</span>
+    <span class="iconfont left-arrow" @click="toLeft" :style="iconStyle"
+      >&#xe61e;</span
+    >
+    <span class="iconfont right-arrow" @click="toRight" :style="iconStyle"
+      >&#xe61f;</span
+    >
+    <span class="pieData-name" :style="iconStyle">{{ pieName }}</span>
   </div>
 </template>
 <script>
@@ -18,6 +22,12 @@ export default {
         //  Cannot read properties of undefined (reading 'getAttribute')
         //  Cannot read properties of undefined (reading 'name')
         return this.pieData[this.currentIndex].name
+      }
+    },
+    // 字体图标大小控制
+    iconStyle() {
+      return {
+        fontSize: this.standFontSize + 'px'
       }
     }
   },
@@ -36,7 +46,8 @@ export default {
     return {
       chartInstance: null, // 空对象
       pieData: null,
-      currentIndex: 0 // 要显示的哪部分的饼图数据
+      currentIndex: 0, // 要显示的哪部分的饼图数据
+      standFontSize: 0
     }
   },
   methods: {
@@ -49,19 +60,13 @@ export default {
         title: {
           text: '▎热销商品销售金额占比统计',
           left: 20,
-          top: 20,
-          textStyle: {
-            fontSize: 38
-          }
+          top: 20
         },
 
         // 图例配置
         legend: {
-          top: '5%',
-          icon: 'circle',
-          textStyle: {
-            fontSize: 20
-          }
+          top: '15%',
+          icon: 'circle'
         },
 
         // 提示框配置
@@ -156,9 +161,29 @@ export default {
 
     // 监听window窗口大小变化
     screenAdapter() {
-      // const standFontSize = (this.$refs.hot_ref.offsetWidth / 100) * 3.6
+      this.standFontSize = (this.$refs.hot_ref.offsetWidth / 100) * 3.6
 
-      const adapterOption = {}
+      const adapterOption = {
+        title: {
+          textStyle: {
+            fontSize: this.standFontSize
+          }
+        },
+        legend: {
+          itemWidth: this.standFontSize / 2,
+          itemHeight: this.standFontSize / 2,
+          itemGap: this.standFontSize / 2,
+          textStyle: {
+            fontSize: this.standFontSize / 2
+          }
+        },
+        series: [
+          {
+            radius: this.standFontSize * 4.5,
+            center: ['50%', '60%']
+          }
+        ]
+      }
       // 生成图表
       this.chartInstance.setOption(adapterOption)
 
@@ -204,7 +229,8 @@ export default {
 
 .pieData-name {
   position: absolute;
-  left: 80%;
+  left: 70%;
   bottom: 20px;
+  color: white;
 }
 </style>
