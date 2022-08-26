@@ -55,9 +55,52 @@ export default {
           }
         },
 
+        // 图例配置
+        legend: {
+          top: '5%',
+          icon: 'circle',
+          textStyle: {
+            fontSize: 20
+          }
+        },
+
+        // 提示框配置
+        tooltip: {
+          show: true,
+          formatter: (arg) => {
+            // console.log(arg)
+            // return 'hh'
+
+            const secondCategory = arg.data.childrenValue
+            let total = 0
+            secondCategory.forEach((item) => {
+              total += item.value
+            })
+            let retStr = ''
+            secondCategory.forEach((item) => {
+              retStr += `
+              ${item.name}&ensp;${parseInt((item.value / total) * 100) + '%'}
+              <br/>
+              `
+            })
+            return retStr
+          }
+        },
+
         series: [
           {
-            type: 'pie'
+            type: 'pie',
+            label: {
+              show: false
+            },
+            emphasis: {
+              label: {
+                show: true
+              },
+              labelLine: {
+                show: false
+              }
+            }
           }
         ]
       }
@@ -84,7 +127,8 @@ export default {
         (item) => {
           return {
             name: item.name,
-            value: item.value
+            value: item.value,
+            childrenValue: item.children
           }
         }
       )
@@ -147,6 +191,7 @@ export default {
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
+  color: white;
 }
 
 .left-arrow {
