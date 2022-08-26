@@ -1,10 +1,24 @@
 {
   "id": "3606674",
-  "name": "no name",
+  "name": "esharts-realTime-monitoring",
   "font_family": "iconfont",
   "css_prefix_text": "icon-",
-  "description": "",
+  "description": "ECharts可视化项目",
   "glyphs": [
+    {
+      "icon_id": "3930511",
+      "name": "右箭头",
+      "font_class": "youjiantou",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "3930513",
+      "name": "左箭头",
+      "font_class": "zuojiantou",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
     {
       "icon_id": "15838429",
       "name": "arrow-down",

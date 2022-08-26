@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3606674 */
-  src: url('iconfont.woff2?t=1661254826700') format('woff2'),
-       url('iconfont.woff?t=1661254826700') format('woff'),
-       url('iconfont.ttf?t=1661254826700') format('truetype');
+  src: url('iconfont.woff2?t=1661502513244') format('woff2'),
+       url('iconfont.woff?t=1661502513244') format('woff'),
+       url('iconfont.ttf?t=1661502513244') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-youjiantou:before {
+  content: "\e61e";
+}
+
+.icon-zuojiantou:before {
+  content: "\e61f";
 }
 
 .icon-arrow-down:before {

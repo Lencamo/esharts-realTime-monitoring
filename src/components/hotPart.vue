@@ -1,10 +1,26 @@
 <template>
   <div class="hotPart-container">
     <div class="chart-container" ref="hot_ref"></div>
+    <!-- 后面两个字体图标必须放到后面🤔 -->
+    <span class="iconfont left-arrow" @click="toLeft">&#xe61e;</span>
+    <span class="iconfont right-arrow" @click="toRight">&#xe61f;</span>
+    <span class="pieData-name">{{ pieName }}</span>
   </div>
 </template>
 <script>
 export default {
+  computed: {
+    pieName() {
+      if (!this.pieData) {
+        return ''
+      } else {
+        // bug 🚩 解决：前面我们把 pieData: []这样会导致报错，如下：
+        //  Cannot read properties of undefined (reading 'getAttribute')
+        //  Cannot read properties of undefined (reading 'name')
+        return this.pieData[this.currentIndex].name
+      }
+    }
+  },
   mounted() {
     this.initChart()
     this.getPieData()
@@ -19,7 +35,8 @@ export default {
   data() {
     return {
       chartInstance: null, // 空对象
-      pieData: []
+      pieData: null,
+      currentIndex: 0 // 要显示的哪部分的饼图数据
     }
   },
   methods: {
@@ -63,16 +80,20 @@ export default {
     updateBarGenerate() {
       // 数据处理✨
       // 1、饼图第一层数据
-      const firstSeriesData = this.pieData[0].children.map((item) => {
-        return {
-          name: item.name,
-          value: item.value
+      const firstSeriesData = this.pieData[this.currentIndex].children.map(
+        (item) => {
+          return {
+            name: item.name,
+            value: item.value
+          }
         }
-      })
+      )
       // 2、图例数据
-      const legendData = this.pieData[0].children.map((item) => {
-        return item.name
-      })
+      const legendData = this.pieData[this.currentIndex].children.map(
+        (item) => {
+          return item.name
+        }
+      )
 
       // option配置
       const dataOption = {
@@ -99,8 +120,46 @@ export default {
 
       // 手动的调用图表对象的resize 才能产生效果
       this.chartInstance.resize()
+    },
+
+    toLeft() {
+      this.currentIndex--
+      if (this.currentIndex < 0) {
+        this.currentIndex = this.pieData.length - 1
+      }
+      this.updateBarGenerate()
+    },
+
+    toRight() {
+      this.currentIndex++
+      if (this.currentIndex > this.pieData.length - 1) {
+        this.currentIndex = 0
+      }
+      this.updateBarGenerate()
     }
   }
 }
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.left-arrow,
+.right-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.left-arrow {
+  left: 10%;
+}
+
+.right-arrow {
+  right: 10%;
+}
+
+.pieData-name {
+  position: absolute;
+  left: 80%;
+  bottom: 20px;
+}
+</style>
