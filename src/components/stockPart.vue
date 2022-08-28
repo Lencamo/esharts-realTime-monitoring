@@ -30,7 +30,7 @@ export default {
       const initOption = {
         // 标题配置
         title: {
-          text: '▎商家销售统计',
+          text: '▎库存和销量分析',
           left: 20,
           top: 20,
           textStyle: {
@@ -56,12 +56,22 @@ export default {
     // 更新图表（option配置）
     updatePieGenerate() {
       // 数据处理✨
+      // 每个饼图的位置坐标
       const centerArr = [
         ['18%', '40%'],
         ['50%', '40%'],
         ['82%', '40%'],
         ['34%', '75%'],
         ['66%', '75%']
+      ]
+
+      // 饼图环的颜色
+      const colorArr = [
+        ['#4FF778', '#0BA82C'],
+        ['#E5DD45', '#E8B11C'],
+        ['#E8821C', '#E55445'],
+        ['#5052EE', '#AB6EE5'],
+        ['#23E5E5', '#2E72BF']
       ]
       const showData = this.pieData.slice(0, 5)
 
@@ -70,12 +80,40 @@ export default {
           type: 'pie',
           radius: [110, 100],
           center: centerArr[index],
+          hoverAnimation: false, // 关闭鼠标移动到饼图时的动画效果
+          labelLine: {
+            show: false // 隐藏指示线
+          },
+          label: {
+            position: 'center', // data下name值的位置
+            color: colorArr[index][0],
+            textStyle: {
+              fontSize: 26
+            }
+          },
+
           data: [
             {
-              value: item.sales
+              name: item.name + '\n' + item.sales,
+              value: item.sales, // 销量值
+              itemStyle: {
+                color: new this.$echarts.graphic.LinearGradient(0, 1, 0, 0, [
+                  {
+                    offset: 0,
+                    color: colorArr[index][0]
+                  },
+                  {
+                    offset: 1,
+                    color: colorArr[index][1]
+                  }
+                ])
+              }
             },
             {
-              value: item.stock
+              value: item.stock, // 库存值
+              itemStyle: {
+                color: '#333843'
+              }
             }
           ]
         }
