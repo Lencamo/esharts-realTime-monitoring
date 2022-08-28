@@ -37,10 +37,10 @@ export default {
         title: {
           text: '▎库存和销量分析',
           left: 20,
-          top: 20,
-          textStyle: {
-            fontSize: 38
-          }
+          top: 20
+          // textStyle: {
+          //   fontSize: 38
+          // }
         }
       }
       // 生成图表
@@ -97,7 +97,7 @@ export default {
       const seriesArr = showData.map((item, index) => {
         return {
           type: 'pie',
-          radius: [110, 100],
+          // radius: [110, 100],
           center: centerArr[index],
           hoverAnimation: false, // 关闭鼠标移动到饼图时的动画效果
           labelLine: {
@@ -105,10 +105,10 @@ export default {
           },
           label: {
             position: 'center', // data下name值的位置
-            color: colorArr[index][0],
-            textStyle: {
-              fontSize: 26
-            }
+            color: colorArr[index][0]
+            // textStyle: {
+            //   fontSize: 26
+            // }
           },
 
           data: [
@@ -148,9 +148,56 @@ export default {
 
     // 监听window窗口大小变化
     screenAdapter() {
-      // const standFontSize = (this.$refs.stock_ref.offsetWidth / 100) * 3.6
+      const standFontSize = (this.$refs.stock_ref.offsetWidth / 100) * 3.6
 
-      const adapterOption = {}
+      // 圆环的半径
+      const innerRadius = standFontSize * 2
+      const outterRadius = innerRadius * 1.125
+
+      const adapterOption = {
+        title: {
+          textStyle: {
+            fontSize: standFontSize
+          }
+        },
+        series: [
+          {
+            type: 'pie',
+            radius: [outterRadius, innerRadius],
+            label: {
+              fontSize: standFontSize / 2
+            }
+          },
+          {
+            type: 'pie',
+            radius: [outterRadius, innerRadius],
+            label: {
+              fontSize: standFontSize / 2
+            }
+          },
+          {
+            type: 'pie',
+            radius: [outterRadius, innerRadius],
+            label: {
+              fontSize: standFontSize / 2
+            }
+          },
+          {
+            type: 'pie',
+            radius: [outterRadius, innerRadius],
+            label: {
+              fontSize: standFontSize / 2
+            }
+          },
+          {
+            type: 'pie',
+            radius: [outterRadius, innerRadius],
+            label: {
+              fontSize: standFontSize / 2
+            }
+          }
+        ]
+      }
       // 生成图表
       this.chartInstance.setOption(adapterOption)
 
