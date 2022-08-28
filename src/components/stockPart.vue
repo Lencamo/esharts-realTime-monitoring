@@ -14,12 +14,17 @@ export default {
     this.screenAdapter()
   },
   destroyed() {
+    // 取消定时器 —— ① 组件销毁时
+    clearInterval(this.timerId)
+
     window.removeEventListener('resize', this.screenAdapter)
   },
   data() {
     return {
       chartInstance: null, // 空对象
-      pieData: null
+      pieData: null,
+      currentPage: 0, // 当前显示的数据
+      timerId: null // 定时器的标识
     }
   },
   methods: {
@@ -40,6 +45,14 @@ export default {
       }
       // 生成图表
       this.chartInstance.setOption(initOption)
+
+      // 定时器 —— ② 鼠标监听事件
+      this.chartInstance.on('mouseover', () => {
+        clearInterval(this.timerId)
+      })
+      this.chartInstance.on('mouseout', () => {
+        this.showChangeFn()
+      })
     },
 
     // 获取图表数据
@@ -51,11 +64,13 @@ export default {
       this.updatePieGenerate()
 
       // 数据处理✨
+
+      // 启动定时器
+      this.showChangeFn()
     },
 
     // 更新图表（option配置）
     updatePieGenerate() {
-      // 数据处理✨
       // 每个饼图的位置坐标
       const centerArr = [
         ['18%', '40%'],
@@ -73,7 +88,11 @@ export default {
         ['#5052EE', '#AB6EE5'],
         ['#23E5E5', '#2E72BF']
       ]
-      const showData = this.pieData.slice(0, 5)
+
+      // 数据处理✨
+      const start = this.currentPage * 5
+      const end = (this.currentPage + 1) * 5
+      const showData = this.pieData.slice(start, end)
 
       const seriesArr = showData.map((item, index) => {
         return {
@@ -137,6 +156,23 @@ export default {
 
       // 手动的调用图表对象的resize 才能产生效果
       this.chartInstance.resize()
+    },
+
+    // 利用定时器实现数据的动态刷新
+    showChangeFn() {
+      if (this.timerId) {
+        clearInterval(this.timerId)
+      }
+      this.timerId = setInterval(() => {
+        // console.log(this.currentPage)
+        this.currentPage++
+
+        if (this.currentPage > 1) {
+          this.currentPage = 0
+        }
+
+        this.updatePieGenerate()
+      }, 5000)
     }
   }
 }
