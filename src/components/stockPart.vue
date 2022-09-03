@@ -73,7 +73,7 @@ export default {
     // async getpieData() {
     getpieData(ret) {
       // const { data: res } = await this.$http.get('/api/stock')
-      console.log(ret)
+      // console.log(ret)
 
       this.pieData = ret
       this.updatePieGenerate()
@@ -128,7 +128,7 @@ export default {
 
           data: [
             {
-              name: item.name + '\n' + item.sales,
+              name: item.name + '\n\n' + item.sales,
               value: item.sales, // 销量值
               itemStyle: {
                 color: new this.$echarts.graphic.LinearGradient(0, 1, 0, 0, [
@@ -166,8 +166,8 @@ export default {
       const standFontSize = (this.$refs.stock_ref.offsetWidth / 100) * 3.6
 
       // 圆环的半径
-      const innerRadius = standFontSize * 2
-      const outterRadius = innerRadius * 1.125
+      const innerRadius = standFontSize * 2.8
+      const outterRadius = innerRadius * 1.1
 
       const adapterOption = {
         title: {
@@ -180,35 +180,35 @@ export default {
             type: 'pie',
             radius: [outterRadius, innerRadius],
             label: {
-              fontSize: standFontSize / 2
+              fontSize: standFontSize / 1.2
             }
           },
           {
             type: 'pie',
             radius: [outterRadius, innerRadius],
             label: {
-              fontSize: standFontSize / 2
+              fontSize: standFontSize / 1.2
             }
           },
           {
             type: 'pie',
             radius: [outterRadius, innerRadius],
             label: {
-              fontSize: standFontSize / 2
+              fontSize: standFontSize / 1.2
             }
           },
           {
             type: 'pie',
             radius: [outterRadius, innerRadius],
             label: {
-              fontSize: standFontSize / 2
+              fontSize: standFontSize / 1.2
             }
           },
           {
             type: 'pie',
             radius: [outterRadius, innerRadius],
             label: {
-              fontSize: standFontSize / 2
+              fontSize: standFontSize / 1.2
             }
           }
         ]

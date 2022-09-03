@@ -79,7 +79,7 @@ export default {
 
         // 图例配置
         legend: {
-          top: '15%',
+          top: '20%',
           icon: 'circle'
         },
 
@@ -185,12 +185,9 @@ export default {
           }
         },
         legend: {
-          itemWidth: this.standFontSize / 2,
-          itemHeight: this.standFontSize / 2,
-          itemGap: this.standFontSize / 2,
-          textStyle: {
-            fontSize: this.standFontSize / 2
-          }
+          itemWidth: this.standFontSize,
+          itemHeight: this.standFontSize,
+          itemGap: this.standFontSize
         },
         series: [
           {

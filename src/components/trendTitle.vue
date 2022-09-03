@@ -2,7 +2,7 @@
   <div>
     <div class="trendTitle" ref="trendTitle_ref" :style="fontSize">
       <!-- <span>▎销量趋势</span> -->
-      <span>▎{{ showTitle }}</span>
+      <span style="font-weight: 800">▎{{ showTitle }}</span>
       <span
         class="iconfont menu-icon"
         :style="fontSize"
@@ -15,6 +15,7 @@
           v-for="item in selectTypes"
           :key="item.key"
           @click="handleTypeSelet(item.key)"
+          style="font-weight: 800"
         >
           {{ item.text }}
         </div>

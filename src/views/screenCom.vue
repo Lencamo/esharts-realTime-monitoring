@@ -1,5 +1,5 @@
 <template>
-  <div class="screen-container" :style="containerStyle">
+  <div class="screen-container">
     <!-- 一、头部区域 -->
     <header class="screen-header">
       <div>
@@ -185,7 +185,7 @@ export default {
 }
 
 // 组件区域划分线条
-section > div {
-  border: 1px solid skyblue;
-}
+// section > div {
+//   border: 1px solid skyblue;
+// }
 </style>

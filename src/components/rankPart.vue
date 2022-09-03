@@ -52,14 +52,14 @@ export default {
         title: {
           text: '▎地区销售排行',
           left: 20,
-          top: 20,
-          textStyle: {
-            fontSize: 38
-          }
+          top: 20
+          // textStyle: {
+          //   fontSize: 38
+          // }
         },
         // 坐标系配置
         grid: {
-          top: '20%',
+          top: '40%',
           left: '3%',
           right: '6%',
           bottom: '3%',

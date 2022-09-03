@@ -73,10 +73,10 @@ export default {
         legend: {
           top: '15%',
           left: 20,
-          icon: 'circle',
-          textStyle: {
-            fontSize: 20
-          }
+          icon: 'circle'
+          // textStyle: {
+          //   fontSize: 20
+          // }
         },
 
         xAxis: {
