@@ -19,37 +19,104 @@
     <div class="screen-body">
       <!-- 1、左侧部分 -->
       <section class="screen-left">
-        <div id="left-top">
+        <!-- <div id="left-top" class="fullscreen"> -->
+        <div
+          id="left-top"
+          :class="[fullScreenStatus.trend ? 'fullscreen' : '']"
+        >
           <!-- 销量趋势图表 -->
           <trend-part></trend-part>
+          <div class="resizeFont">
+            <!-- <span class="iconfont">&#xe826;</span> -->
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.trend ? 'icon-compress-alt' : 'icon-expand-alt'
+              ]"
+            ></span>
+          </div>
         </div>
-        <div id="left-bottom">
+        <div
+          id="left-bottom"
+          :class="[fullScreenStatus.seller ? 'fullscreen' : '']"
+        >
           <!-- 商家销售金额图表 -->
           <seller-part></seller-part>
+          <div class="resizeFont">
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.seller
+                  ? 'icon-compress-alt'
+                  : 'icon-expand-alt'
+              ]"
+            ></span>
+          </div>
         </div>
       </section>
 
       <!-- 2、中间部分 -->
       <section class="screen-middle">
-        <div id="middle-top">
+        <div
+          id="middle-top"
+          :class="[fullScreenStatus.map ? 'fullscreen' : '']"
+        >
           <!-- 商家分布图表 -->
           <map-part></map-part>
+          <div class="resizeFont">
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.map ? 'icon-compress-alt' : 'icon-expand-alt'
+              ]"
+            ></span>
+          </div>
         </div>
-        <div id="middle-bottom">
+        <div
+          id="middle-bottom"
+          :class="[fullScreenStatus.rank ? 'fullscreen' : '']"
+        >
           <!-- 地区销量排行图表 -->
           <rank-part></rank-part>
+          <div class="resizeFont">
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.rank ? 'icon-compress-alt' : 'icon-expand-alt'
+              ]"
+            ></span>
+          </div>
         </div>
       </section>
 
       <!-- 3、右侧部分 -->
       <section class="screen-right">
-        <div id="right-top">
+        <div id="right-top" :class="[fullScreenStatus.hot ? 'fullscreen' : '']">
           <!-- 热销商品占比图表 -->
           <hot-part></hot-part>
+          <div class="resizeFont">
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.hot ? 'icon-compress-alt' : 'icon-expand-alt'
+              ]"
+            ></span>
+          </div>
         </div>
-        <div id="right-bottom">
+        <div
+          id="right-bottom"
+          :class="[fullScreenStatus.stock ? 'fullscreen' : '']"
+        >
           <!-- 库存销量分析图表 -->
           <stock-part></stock-part>
+          <div class="resizeFont">
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.stock ? 'icon-compress-alt' : 'icon-expand-alt'
+              ]"
+            ></span>
+          </div>
         </div>
       </section>
     </div>
@@ -65,6 +132,18 @@ import StockPart from '@/components/stockPart.vue'
 import TrendPart from '@/components/trendPart.vue'
 
 export default {
+  data() {
+    return {
+      fullScreenStatus: {
+        seller: false,
+        map: false,
+        rank: false,
+        hot: false,
+        stock: false,
+        trend: false
+      }
+    }
+  },
   components: {
     SellerPart,
     MapPart,
@@ -84,6 +163,17 @@ export default {
   background-color: #161522;
   color: #fff;
   box-sizing: border-box;
+}
+
+// 使用class样式🚩实现全屏展示
+.fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  z-index: 100;
 }
 
 // 头部区域样式
@@ -188,4 +278,12 @@ export default {
 // section > div {
 //   border: 1px solid skyblue;
 // }
+
+// 全屏切换图标
+.resizeFont {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+}
 </style>
