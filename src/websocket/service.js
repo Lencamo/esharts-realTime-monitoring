@@ -14,6 +14,9 @@ export default class SocketService {
   // 连接服务器
   ws = null
 
+  connected = false
+  sendRetryNum = 0
+
   serviceConnectFn() {
     if (!window.WebSocket) {
       console.log('您的浏览器不支持websocket')
@@ -24,6 +27,8 @@ export default class SocketService {
 
     this.ws.onopen = () => {
       console.log('连接服务端成功')
+
+      this.connected = true
     }
 
     // ✨接收服务端数据
@@ -52,6 +57,8 @@ export default class SocketService {
 
     this.ws.onclose = () => {
       console.log('连接服务端失败')
+
+      this.connected = false
     }
   }
 
@@ -70,6 +77,19 @@ export default class SocketService {
 
   // ✨发送数据
   sendFn(data) {
-    this.ws.send(JSON.stringify(data))
+    // this.ws.send(JSON.stringify(data))
+
+    // 解决bug：Failed to execute 'send' on 'WebSocket': Still in CONNECTING state."
+    if (this.connected) {
+      this.ws.send(JSON.stringify(data))
+
+      this.sendRetryNum = 0
+    } else {
+      this.sendRetryNum++
+
+      setTimeout(() => {
+        this.ws.send(JSON.stringify(data))
+      }, this.sendRetryNum * 500)
+    }
   }
 }
