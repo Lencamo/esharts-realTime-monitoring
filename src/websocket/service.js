@@ -26,12 +26,50 @@ export default class SocketService {
       console.log('连接服务端成功')
     }
 
+    // ✨接收服务端数据
     this.ws.onmessage = (msg) => {
-      console.log('前端发送的数据：' + msg.data)
+      // console.log('前端发送的数据：' + msg.data)
+      const receiveData = JSON.parse(msg.data)
+      const socketType = receiveData.socketType
+
+      // 回调函数是否存在
+      if (this.callbackMapData[socketType]) {
+        const action = receiveData.action
+
+        if (action === 'getData') {
+          const chartData = JSON.parse(receiveData.data)
+
+          // .call的使用👀（数据存储）（Function.prototype.call()）
+          // 通过call可接受参数的接收参数的方式为组件中的get__Data(ret)传送数据
+          this.callbackMapData[socketType].call(this, chartData)
+        } else if (action === 'fullScreen') {
+          console.log('全屏展示数据')
+        } else if (action === 'themeChange') {
+          console.log('主题切换数据')
+        }
+      }
     }
 
     this.ws.onclose = () => {
       console.log('连接服务端失败')
     }
+  }
+
+  // 服务端数据处理 —— 组件中调用
+  // 数据存储（往里面存储一个回调函数callBack【组件中的get__Data()函数】）（该回调函数的唯一标识为socketType）
+  callbackMapData = {}
+  // 1、回调函数注册
+  regCallback(socketType, callBack) {
+    this.callbackMapData[socketType] = callBack
+  }
+
+  // 2、回调函数注销
+  unregCallback(socketType) {
+    this.callbackMapData[socketType] = null
+  }
+
+  // ✨发送数据
+  sendFn(data) {
+    this.ws.send(JSON.stringify(data))
   }
 }

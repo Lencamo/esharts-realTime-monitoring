@@ -16,9 +16,20 @@ export default {
   components: {
     trendTitle
   },
+  created() {
+    // 注册回调函数
+    this.$socket.regCallback('trendData', this.getLineData)
+  },
   mounted() {
     this.initChart()
-    this.getLineData()
+    // this.getLineData()
+    // 获取数据的地方改为发送数据（websocket的🚩方式获取数据）
+    this.$socket.sendFn({
+      action: 'getData',
+      socketType: 'trendData',
+      chartName: 'trend',
+      value: ''
+    })
 
     window.addEventListener('resize', this.screenAdapter)
     // 屏幕适配
@@ -26,6 +37,9 @@ export default {
   },
   destroyed() {
     window.removeEventListener('resize', this.screenAdapter)
+
+    // 销毁回调函数
+    this.$socket.unregCallback('trendData')
   },
   data() {
     return {
@@ -79,11 +93,13 @@ export default {
     },
 
     // 获取图表数据
-    async getLineData() {
-      const { data: res } = await this.$http.get('/api/trend')
+    // async getLineData() {
+    getLineData(ret) {
+      // const { data: res } = await this.$http.get('/api/trend')
+
       // console.log(res) // 结果有map、seller、commodity三个销量趋势
 
-      this.lineData = res
+      this.lineData = ret
       this.updateLineGenerate()
 
       // 数据处理✨

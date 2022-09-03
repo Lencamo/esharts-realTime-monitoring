@@ -13,6 +13,7 @@ import '@/assets/font/iconfont.css'
 // 引入websocket
 import SocketService from '@/websocket/service'
 SocketService.Instance.serviceConnectFn() // 得到实例对象 SocketService.Instance()
+Vue.prototype.$socket = SocketService.Instance
 
 // 全局配置axios的请求🌈根路径
 axios.defaults.baseURL = 'http://127.0.0.1:3000'
