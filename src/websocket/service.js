@@ -16,6 +16,7 @@ export default class SocketService {
 
   connected = false
   sendRetryNum = 0
+  connectRetryNum = 0
 
   serviceConnectFn() {
     if (!window.WebSocket) {
@@ -29,6 +30,8 @@ export default class SocketService {
       console.log('连接服务端成功')
 
       this.connected = true
+
+      this.connectRetryNum = 0
     }
 
     // ✨接收服务端数据
@@ -59,6 +62,11 @@ export default class SocketService {
       console.log('连接服务端失败')
 
       this.connected = false
+
+      this.connectRetryNum++
+      setTimeout(() => {
+        this.serviceConnectFn()
+      }, this.connectRetryNum * 500)
     }
   }
 
