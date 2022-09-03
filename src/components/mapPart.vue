@@ -8,9 +8,20 @@ import axios from 'axios'
 import { getProvinceMapInfo } from '@/utils/name2pinyin'
 
 export default {
+  created() {
+    // 注册回调函数
+    this.$socket.regCallback('mapData', this.getMapData)
+  },
   mounted() {
     this.initChart()
-    this.getMapData()
+    // this.getMapData()
+    // 获取数据的地方改为发送数据（websocket的🚩方式获取数据）
+    this.$socket.sendFn({
+      action: 'getData',
+      socketType: 'mapData',
+      chartName: 'map',
+      value: ''
+    })
 
     window.addEventListener('resize', this.screenAdapter)
     // 屏幕适配
@@ -18,6 +29,9 @@ export default {
   },
   destroyed() {
     window.removeEventListener('resize', this.screenAdapter)
+
+    // 销毁回调函数
+    this.$socket.unregCallback('mapData')
   },
   data() {
     return {
@@ -106,11 +120,12 @@ export default {
     },
 
     // 获取散点图数据
-    async getMapData() {
-      const { data: res } = await this.$http.get('/api/map')
+    // async getMapData() {
+    getMapData(ret) {
+      // const { data: res } = await this.$http.get('/api/map')
       // console.log(res)
 
-      this.mapData = res
+      this.mapData = ret
       this.updateBarGenerate()
 
       // 数据处理✨

@@ -5,9 +5,20 @@
 </template>
 <script>
 export default {
+  created() {
+    // 注册回调函数
+    this.$socket.regCallback('rankData', this.getBarData)
+  },
   mounted() {
     this.initChart()
-    this.getBarData()
+    // this.getBarData()
+    // 获取数据的地方改为发送数据（websocket的🚩方式获取数据）
+    this.$socket.sendFn({
+      action: 'getData',
+      socketType: 'rankData',
+      chartName: 'rank',
+      value: ''
+    })
 
     window.addEventListener('resize', this.screenAdapter)
     // 屏幕适配
@@ -18,6 +29,9 @@ export default {
     clearInterval(this.timerId)
 
     window.removeEventListener('resize', this.screenAdapter)
+
+    // 销毁回调函数
+    this.$socket.unregCallback('rankData')
   },
   data() {
     return {
@@ -83,11 +97,12 @@ export default {
     },
 
     // 获取图表数据
-    async getBarData() {
-      const { data: res } = await this.$http.get('/api/rank')
+    // async getBarData() {
+    getBarData(ret) {
+      // const { data: res } = await this.$http.get('/api/rank')
       // console.log(res)
 
-      this.barData = res
+      this.barData = ret
 
       // 数据处理✨
       // 排序

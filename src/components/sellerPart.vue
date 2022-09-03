@@ -5,9 +5,20 @@
 </template>
 <script>
 export default {
+  created() {
+    // 注册回调函数
+    this.$socket.regCallback('sellerData', this.getBarData)
+  },
   mounted() {
     this.initChart()
-    this.getBarData()
+    // this.getBarData()
+    // 获取数据的地方改为发送数据（websocket的🚩方式获取数据）
+    this.$socket.sendFn({
+      action: 'getData',
+      socketType: 'sellerData',
+      chartName: 'seller',
+      value: ''
+    })
 
     window.addEventListener('resize', this.screenAdapter)
     // 屏幕适配
@@ -18,6 +29,9 @@ export default {
     clearInterval(this.timerId)
 
     window.removeEventListener('resize', this.screenAdapter)
+
+    // 销毁回调函数
+    this.$socket.unregCallback('sellerData')
   },
   data() {
     return {
@@ -117,11 +131,12 @@ export default {
     },
 
     // 获取图表数据
-    async getBarData() {
-      const { data: res } = await this.$http.get('/api/seller')
+    // async getBarData() {
+    getBarData(ret) {
+      // const { data: res } = await this.$http.get('/api/seller')
       // console.log(res)
 
-      this.barData = res
+      this.barData = ret
       this.updateBarGenerate()
 
       // 数据处理✨

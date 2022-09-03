@@ -31,9 +31,20 @@ export default {
       }
     }
   },
+  created() {
+    // 注册回调函数
+    this.$socket.regCallback('hotData', this.getPieData)
+  },
   mounted() {
     this.initChart()
-    this.getPieData()
+    // this.getPieData()
+    // 获取数据的地方改为发送数据（websocket的🚩方式获取数据）
+    this.$socket.sendFn({
+      action: 'getData',
+      socketType: 'hotData',
+      chartName: 'hotproduct',
+      value: ''
+    })
 
     window.addEventListener('resize', this.screenAdapter)
     // 屏幕适配
@@ -41,6 +52,9 @@ export default {
   },
   destroyed() {
     window.removeEventListener('resize', this.screenAdapter)
+
+    // 销毁回调函数
+    this.$socket.unregCallback('hotData')
   },
   data() {
     return {
@@ -114,11 +128,12 @@ export default {
     },
 
     // 获取图表数据
-    async getPieData() {
-      const { data: res } = await this.$http.get('/api/hotproduct')
+    // async getPieData() {
+    getPieData(ret) {
+      // const { data: res } = await this.$http.get('/api/hotproduct')
       // console.log(res)
 
-      this.pieData = res
+      this.pieData = ret
       this.updateBarGenerate()
 
       // 数据处理✨
