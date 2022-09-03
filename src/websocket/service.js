@@ -51,7 +51,9 @@ export default class SocketService {
           // 通过call可接受参数的接收参数的方式为组件中的get__Data(ret)传送数据
           this.callbackMapData[socketType].call(this, chartData)
         } else if (action === 'fullScreen') {
-          console.log('全屏展示数据')
+          // console.log('全屏展示数据')
+
+          this.callbackMapData[socketType].call(this, receiveData)
         } else if (action === 'themeChange') {
           console.log('主题切换数据')
         }

@@ -95,16 +95,21 @@
 
       <!-- 3、右侧部分 -->
       <section class="screen-right">
-        <div id="right-top" :class="[fullScreenStatus.hot ? 'fullscreen' : '']">
+        <div
+          id="right-top"
+          :class="[fullScreenStatus.hotproduct ? 'fullscreen' : '']"
+        >
           <!-- 热销商品占比图表 -->
-          <hot-part ref="hot"></hot-part>
+          <hot-part ref="hotproduct"></hot-part>
           <div class="resizeFont">
             <span
               :class="[
                 'iconfont',
-                fullScreenStatus.hot ? 'icon-compress-alt' : 'icon-expand-alt'
+                fullScreenStatus.hotproduct
+                  ? 'icon-compress-alt'
+                  : 'icon-expand-alt'
               ]"
-              @click="resizeChangeFn('hot')"
+              @click="resizeChangeFn('hotproduct')"
             ></span>
           </div>
         </div>
@@ -138,13 +143,21 @@ import StockPart from '@/components/stockPart.vue'
 import TrendPart from '@/components/trendPart.vue'
 
 export default {
+  created() {
+    // 注册回调函数
+    this.$socket.regCallback('fullScreen', this.getStatusData)
+  },
+  destroyed() {
+    // 销毁回调函数
+    this.$socket.unregCallback('fullScreen')
+  },
   data() {
     return {
       fullScreenStatus: {
         seller: false,
         map: false,
         rank: false,
-        hot: false,
+        hotproduct: false,
         stock: false,
         trend: false
       }
@@ -160,10 +173,33 @@ export default {
   },
   methods: {
     resizeChangeFn(chartName) {
+      // 一、普通方式
       // 1、全屏展示
-      this.fullScreenStatus[chartName] = !this.fullScreenStatus[chartName]
+      // this.fullScreenStatus[chartName] = !this.fullScreenStatus[chartName]
       // 2、屏幕适配
-      // this.$refs[chartName].screenAdapter()
+      // this.$nextTick(() => {
+      //   this.$refs[chartName].screenAdapter()
+      // })
+
+      // 二、websocket方式
+      const wantStatus = !this.fullScreenStatus[chartName]
+
+      this.$socket.sendFn({
+        action: 'fullScreen',
+        socketType: 'fullScreen',
+        chartName: chartName,
+        value: wantStatus
+      })
+    },
+
+    // 获取服务器群发数据
+    getStatusData(data) {
+      const chartName = data.chartName
+      const wantStatus = data.value
+
+      // 1、全屏展示
+      this.fullScreenStatus[chartName] = wantStatus
+      // 2、屏幕适配
       this.$nextTick(() => {
         this.$refs[chartName].screenAdapter()
       })
