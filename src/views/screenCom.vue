@@ -1,20 +1,16 @@
 <template>
-  <div class="screen-container">
+  <div class="screen-container" :style="containerStyle">
     <!-- 一、头部区域 -->
     <header class="screen-header">
       <div>
-        <img src="/static//img/header_border_dark.png" alt="" />
+        <img :src="headerSrc" alt="" />
       </div>
       <span class="logo">
-        <img src="/static/img/logo_dark.png" alt="" />
+        <img :src="logoSrc" alt="" />
       </span>
       <span class="title">电商平台实时监控系统</span>
       <div class="title-right">
-        <img
-          src="/static/img/qiehuan_dark.png"
-          class="qiehuan"
-          @click="themeChangeFn"
-        />
+        <img :src="clothesSrc" class="qiehuan" @click="themeChangeFn" />
         <span class="datetime">2049-01-01 00:00:00</span>
       </div>
     </header>
@@ -146,7 +142,34 @@ import HotPart from '@/components/hotPart.vue'
 import StockPart from '@/components/stockPart.vue'
 import TrendPart from '@/components/trendPart.vue'
 
+import { mapState } from 'vuex'
+import { getThemeValue } from '@/utils/theme_utils'
+
 export default {
+  computed: {
+    // 使用vuex数据
+    ...mapState(['theme']),
+
+    // 主题切换时的样式变化
+    // 1、图片
+    headerSrc() {
+      return '/static/img/' + getThemeValue(this.theme).headerBorderSrc
+    },
+    logoSrc() {
+      return '/static/img/' + getThemeValue(this.theme).logoSrc
+    },
+    clothesSrc() {
+      return '/static/img/' + getThemeValue(this.theme).themeSrc
+    },
+
+    // 2、其他
+    containerStyle() {
+      return {
+        backgroundColor: getThemeValue(this.theme).backgroundColor,
+        color: getThemeValue(this.theme).titleColor
+      }
+    }
+  },
   created() {
     // 注册回调函数
     this.$socket.regCallback('fullScreen', this.getStatusData)

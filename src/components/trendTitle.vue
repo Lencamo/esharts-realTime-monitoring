@@ -24,13 +24,22 @@
   </div>
 </template>
 <script>
+import { getThemeValue } from '@/utils/theme_utils'
+
 export default {
   name: 'trendTitle',
   model: {
     prop: 'showStatus',
     event: 'change-status'
   },
-  props: ['showStatus', 'standFontSize'],
+  props: ['showStatus', 'standFontSize', 'theme'],
+  watch: {
+    themeStatus() {
+      // console.log('主题发生变化')
+      // console.log(this.theme)
+      this.$emit('update:theme', this.theme)
+    }
+  },
   mounted() {
     this.getLineData()
   },
@@ -66,7 +75,11 @@ export default {
     // 分辨率适配
     fontSize() {
       return {
-        fontSize: this.standFontSize + 'px'
+        fontSize: this.standFontSize + 'px',
+
+        // 主题切换时的样式变化（左右箭头）
+        backgroundColor: getThemeValue(this.theme).titleBackgroundColor,
+        color: getThemeValue(this.theme).titleColor
       }
     },
     marginLeft() {
@@ -96,12 +109,12 @@ export default {
 </script>
 <style lang="less" scoped>
 .trendTitle {
-  background-color: #222733;
+  // background-color: #222733;
   position: absolute;
   left: 20px;
   top: 20px;
   font-size: 38px;
-  color: white;
+  // color: white;
   z-index: 10;
 
   .menu-icon {

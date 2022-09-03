@@ -5,6 +5,7 @@
       @showType="latestTypeFn"
       v-model="isShow"
       :standFontSize.sync="standFontSize"
+      :theme.sync="theme"
     ></trendTitle>
     <div class="chart-container" ref="trend_ref"></div>
   </div>

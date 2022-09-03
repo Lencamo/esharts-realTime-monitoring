@@ -13,6 +13,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { getThemeValue } from '@/utils/theme_utils'
 
 export default {
   computed: {
@@ -32,7 +33,10 @@ export default {
     // 字体图标大小控制
     iconStyle() {
       return {
-        fontSize: this.standFontSize + 'px'
+        fontSize: this.standFontSize + 'px',
+
+        // 主题切换时的样式变化（左右箭头）
+        color: getThemeValue(this.theme).titleColor
       }
     }
   },
