@@ -21,9 +21,11 @@
       <section class="screen-left">
         <div id="left-top">
           <!-- 销量趋势图表 -->
+          <trend-part></trend-part>
         </div>
         <div id="left-bottom">
           <!-- 商家销售金额图表 -->
+          <seller-part></seller-part>
         </div>
       </section>
 
@@ -31,9 +33,11 @@
       <section class="screen-middle">
         <div id="middle-top">
           <!-- 商家分布图表 -->
+          <map-part></map-part>
         </div>
         <div id="middle-bottom">
           <!-- 地区销量排行图表 -->
+          <rank-part></rank-part>
         </div>
       </section>
 
@@ -41,9 +45,11 @@
       <section class="screen-right">
         <div id="right-top">
           <!-- 热销商品占比图表 -->
+          <hot-part></hot-part>
         </div>
         <div id="right-bottom">
           <!-- 库存销量分析图表 -->
+          <stock-part></stock-part>
         </div>
       </section>
     </div>
@@ -51,7 +57,23 @@
 </template>
 
 <script>
-export default {}
+import SellerPart from '@/components/sellerPart.vue'
+import MapPart from '@/components/mapPart.vue'
+import RankPart from '@/components/rankPart.vue'
+import HotPart from '@/components/hotPart.vue'
+import StockPart from '@/components/stockPart.vue'
+import TrendPart from '@/components/trendPart.vue'
+
+export default {
+  components: {
+    SellerPart,
+    MapPart,
+    RankPart,
+    HotPart,
+    StockPart,
+    TrendPart
+  }
+}
 </script>
 
 <style lang="less" scoped>
