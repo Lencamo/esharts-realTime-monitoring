@@ -173,10 +173,12 @@ export default {
   created() {
     // 注册回调函数
     this.$socket.regCallback('fullScreen', this.getStatusData)
+    this.$socket.regCallback('themeChange', this.getThemeData)
   },
   destroyed() {
     // 销毁回调函数
     this.$socket.unregCallback('fullScreen')
+    this.$socket.unregCallback('themeChange')
   },
   data() {
     return {
@@ -219,7 +221,7 @@ export default {
       })
     },
 
-    // 获取服务器群发数据
+    // 获取服务器群发数据（全屏切换）
     getStatusData(data) {
       const chartName = data.chartName
       const wantStatus = data.value
@@ -235,6 +237,18 @@ export default {
     // 切换主题
     themeChangeFn() {
       // vuex数据变化
+      // this.$store.commit('changeTheme')
+      // 获取数据的地方改为发送数据（websocket的🚩方式获取数据）
+      this.$socket.sendFn({
+        action: 'themeChange',
+        socketType: 'themeChange',
+        chartName: '',
+        value: ''
+      })
+    },
+
+    // 对服务器群发做出回应（主题切换）
+    getThemeData() {
       this.$store.commit('changeTheme')
     }
   }

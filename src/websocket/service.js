@@ -55,7 +55,9 @@ export default class SocketService {
 
           this.callbackMapData[socketType].call(this, receiveData)
         } else if (action === 'themeChange') {
-          console.log('主题切换数据')
+          // console.log('主题切换数据')
+
+          this.callbackMapData[socketType].call(this, receiveData)
         }
       }
     }
