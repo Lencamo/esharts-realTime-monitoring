@@ -4,7 +4,26 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
+  computed: {
+    // 使用vuex数据
+    ...mapState(['theme'])
+  },
+  watch: {
+    // 监听vuex的theme值变化
+    theme() {
+      // console.log('主题发生变化')
+
+      // 销毁图表（使用ECharts的API）
+      this.chartInstance.dispose()
+      // 重新生成图表
+      this.initChart()
+      this.screenAdapter()
+      this.updatePieGenerate()
+    }
+  },
   created() {
     // 注册回调函数
     this.$socket.regCallback('stockData', this.getpieData)
@@ -44,7 +63,7 @@ export default {
   methods: {
     // 初始化ECharts对象
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.stock_ref, 'chalk')
+      this.chartInstance = this.$echarts.init(this.$refs.stock_ref, this.theme)
 
       const initOption = {
         // 标题配置
