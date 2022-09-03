@@ -12,8 +12,13 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
   computed: {
+    // 使用vuex数据
+    ...mapState(['theme']),
+
     pieName() {
       if (!this.pieData) {
         return ''
@@ -29,6 +34,19 @@ export default {
       return {
         fontSize: this.standFontSize + 'px'
       }
+    }
+  },
+  watch: {
+    // 监听vuex的theme值变化
+    theme() {
+      // console.log('主题发生变化')
+
+      // 销毁图表（使用ECharts的API）
+      this.chartInstance.dispose()
+      // 重新生成图表
+      this.initChart()
+      this.screenAdapter()
+      this.updateBarGenerate()
     }
   },
   created() {
@@ -67,7 +85,7 @@ export default {
   methods: {
     // 初始化ECharts对象
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.hot_ref, 'chalk')
+      this.chartInstance = this.$echarts.init(this.$refs.hot_ref, this.theme)
 
       const initOption = {
         // 标题配置

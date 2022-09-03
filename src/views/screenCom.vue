@@ -10,7 +10,11 @@
       </span>
       <span class="title">电商平台实时监控系统</span>
       <div class="title-right">
-        <img src="/static/img/qiehuan_dark.png" class="qiehuan" />
+        <img
+          src="/static/img/qiehuan_dark.png"
+          class="qiehuan"
+          @click="themeChangeFn"
+        />
         <span class="datetime">2049-01-01 00:00:00</span>
       </div>
     </header>
@@ -203,6 +207,12 @@ export default {
       this.$nextTick(() => {
         this.$refs[chartName].screenAdapter()
       })
+    },
+
+    // 切换主题
+    themeChangeFn() {
+      // vuex数据变化
+      this.$store.commit('changeTheme')
     }
   }
 }
